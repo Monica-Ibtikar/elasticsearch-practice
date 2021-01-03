@@ -44,4 +44,44 @@ class AbstractGenericRepository implements GenericRepositoryInterface
         $response = $this->client->index($params);
         return $response["result"];
     }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function find($id)
+    {
+        $params = array_merge($this->commonParams, [
+            "id" => $id
+        ]);
+        $response = $this->client->get($params);
+        return $response["_source"];
+    }
+
+    /**
+     * @param $id
+     * @param array $doc
+     * @return mixed
+     */
+    public function update($id, array $doc)
+    {
+        $params = array_merge($this->commonParams, [
+            "id" => $id,
+            "body" => [ "doc" => $doc]
+        ]);
+        $response = $this->client->update($params);
+        return $response["result"];
+    }
+
+    /**
+     * @param array $match
+     * @return mixed
+     */
+    public function search(array $match)
+    {
+        $params = array_merge($this->commonParams, [
+            "body" => [ "query" => [ "match" => $match]]
+        ]);
+        return $this->client->search($params);
+    }
 }

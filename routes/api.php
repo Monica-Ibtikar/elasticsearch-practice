@@ -14,5 +14,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::apiResource('departments',"DepartmentController");
-Route::apiResource('developers',"DeveloperController");
+Route::apiResource('developers.departments',"DepartmentController")->shallow();
+Route::apiResource('departments.developers',"DeveloperController")->shallow();

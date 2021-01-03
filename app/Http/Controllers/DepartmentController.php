@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Department;
 use App\Repositories\Contracts\DepartmentRepositoryInterface;
+use App\Repositories\Contracts\DeveloperRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -14,6 +15,8 @@ class DepartmentController extends Controller
     public function __construct(DepartmentRepositoryInterface $departmentRepository)
     {
         $this->departmentRepo = $departmentRepository;
+        $repoBaseName = basename(DeveloperRepositoryInterface::class);
+        $this->middleware("inner.object:leader,$repoBaseName")->only('update');
     }
 
     /**
@@ -57,12 +60,18 @@ class DepartmentController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Department  $department
+     * @param  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Department $department)
+    public function update(Request $request, $id )
     {
-        //
+        $result = $this->departmentRepo->update($id, $request->input());
+        if($result == "updated"){
+            return response('Successful Operation', Response::HTTP_OK);
+        }
+        else {
+            return response('Failed Operation', Response::HTTP_BAD_REQUEST);
+        }
     }
 
     /**
@@ -73,6 +82,6 @@ class DepartmentController extends Controller
      */
     public function destroy(Department $department)
     {
-        //
+
     }
 }
