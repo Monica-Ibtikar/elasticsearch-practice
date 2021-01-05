@@ -77,11 +77,26 @@ class AbstractGenericRepository implements GenericRepositoryInterface
      * @param array $match
      * @return mixed
      */
-    public function search(array $match)
+    public function search(array $match = [])
     {
-        $params = array_merge($this->commonParams, [
-            "body" => [ "query" => [ "match" => $match]]
-        ]);
+        if(empty($match)) {
+            $result = $this->getAll();
+        } else {
+            $params = array_merge($this->commonParams, [
+                "body" => [ "query" => [ "match" => $match]]
+            ]);
+            $result = $this->client->search($params);
+        }
+        return $result;
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function getAll()
+    {
+        $params = $this->commonParams;
+
         return $this->client->search($params);
     }
 }

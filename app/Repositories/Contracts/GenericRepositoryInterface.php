@@ -32,5 +32,5 @@ interface GenericRepositoryInterface
      * @param array $match
      * @return mixed
      */
-    public function search(array $match);
+    public function search(array $match = []);
 }

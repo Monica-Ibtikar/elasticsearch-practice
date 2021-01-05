@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Elasticsearch\ClientBuilder;
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 
 class CreateIndex extends Command
 {
@@ -12,14 +13,14 @@ class CreateIndex extends Command
      *
      * @var string
      */
-    protected $signature = 'create:index {index}';
+    protected $signature = 'create:index {model}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = "Create a new index";
+    protected $description = "Create a new index given model name";
 
     /**
      * Create a new command instance.
@@ -37,13 +38,15 @@ class CreateIndex extends Command
      */
     public function handle()
     {
+        $model = "App\\".$this->argument('model');
         $params = [
-            'index' => $this->argument('index'),
+            'index' => Str::lower(Str::plural($this->argument('model'))),
             'body' => [
                 'settings' => [
-                    'number_of_shards' => 1,
+                    'number_of_shards' => 2,
                     'number_of_replicas' => 1
-                ]
+                ],
+                'mappings' => $model::getMappings()
             ]
         ];
 

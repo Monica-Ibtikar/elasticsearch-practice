@@ -5,8 +5,10 @@ namespace App\Providers;
 use App\Department;
 use App\Repositories\Contracts\DepartmentRepositoryInterface;
 use App\Repositories\Contracts\DeveloperRepositoryInterface;
+use App\Repositories\Contracts\ProjectRepositoryInterface;
 use App\Repositories\DepartmentRepository;
 use App\Repositories\DeveloperRepository;
+use App\Repositories\ProjectRepository;
 use Elasticsearch\ClientBuilder;
 use Illuminate\Support\ServiceProvider;
 
@@ -44,6 +46,10 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind( DeveloperRepositoryInterface::class, function ($app) {
             return new DeveloperRepository("developers");
+        });
+
+        $this->app->bind( ProjectRepositoryInterface::class, function ($app) {
+            return new ProjectRepository("projects");
         });
     }
 }

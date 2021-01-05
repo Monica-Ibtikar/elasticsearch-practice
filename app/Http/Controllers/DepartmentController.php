@@ -15,8 +15,6 @@ class DepartmentController extends Controller
     public function __construct(DepartmentRepositoryInterface $departmentRepository)
     {
         $this->departmentRepo = $departmentRepository;
-        $repoBaseName = basename(DeveloperRepositoryInterface::class);
-        $this->middleware("inner.object:leader,$repoBaseName")->only('update');
     }
 
     /**
@@ -26,6 +24,8 @@ class DepartmentController extends Controller
      */
     public function index()
     {
+        $results = $this->departmentRepo->search();
+        return $results["hits"]["hits"];
     }
 
     /**
